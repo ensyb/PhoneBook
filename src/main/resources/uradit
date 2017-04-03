@@ -1,0 +1,12 @@
+|--poèetna stranica (index)
+|	|--registruj se
+|	|--------| 
+|	|--prijavi se 
+|	|	---dodaj novi kontakt
+|	|	---izlistaj kontakte
+|	|	---pretraži kontakte
+|	|	---uredi kontakt
+|	|	---izbriši kontakt
+|	|	---odjavi se
+|	|________
+|--o imeniku stranica

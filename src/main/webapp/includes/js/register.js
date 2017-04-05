@@ -16,13 +16,13 @@ var Register = (function(){
 	            },
 	            success :  function(data){
 	               if(data.trim() == "success"){
-	                    $("#register-form").fadeOut(500, function(){ 
+	                    $("#register-form").fadeOut(600, function(){ 
 	                    	$("#register-main-message").html(
 	                    			'<div class="alert alert-success"> <h3>Uspješno ste se registrovali</h3> </div>');
 	                    }); 
 	                    setTimeout(function(){
 	                    	$(".registracijaModal").modal('toggle');
-	                    }, 2000);
+	                    }, 1500);
 
 	                }
 	                else if(data != "success"){

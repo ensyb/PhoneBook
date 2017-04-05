@@ -2,12 +2,17 @@ package io.github.ensyb.phone.domain.user.vo;
 
 public class UserVo {
 
-	private final int id;
+	private int id;
 	private final String email;
 	private final String password;
 	
 	public UserVo(int id, String email, String password) {
 		this.id = id;
+		this.email = email;
+		this.password = password;
+	}
+	
+	public UserVo(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}

@@ -1,16 +1,15 @@
 package io.github.ensyb.phone.application.commands;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import io.github.ensyb.phone.application.controller.ViewModel;
+import io.github.ensyb.phone.application.controller.Request;
+import io.github.ensyb.phone.application.controller.response.Forward;
+import io.github.ensyb.phone.application.controller.response.Response;
 
 public class NotFoundCommand implements Command{
 
 	@Override
-	public ViewModel execute(HttpServletRequest request, HttpServletResponse response) {
-		return new ViewModel("index.jsp",true);
+	public Response execute(Request request) {
+		//u malom vrtu raste divlji plod
+		return new Forward("WEB-INF/index.jsp");
 	}
-
 
 }

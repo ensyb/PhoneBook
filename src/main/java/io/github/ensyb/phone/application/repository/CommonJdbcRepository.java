@@ -60,7 +60,7 @@ public class CommonJdbcRepository {
 	public <Type> int insertObjectReturnKey(String sql, Object[] outputMapperValues) {
 		int generatedKey = 0;
 		try (Connection connection = source.getConnection();
-				PreparedStatement statement = prepareStatement(connection, sql, false, outputMapperValues)) {
+				PreparedStatement statement = prepareStatement(connection, sql, true, outputMapperValues)) {
 			int affectedRows = statement.executeUpdate();
 			if (affectedRows == 0)
 				throw new CommonRepositoryException("repository insert failed, no rows affected.");

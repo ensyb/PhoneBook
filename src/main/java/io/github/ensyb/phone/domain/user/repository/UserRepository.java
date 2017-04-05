@@ -14,7 +14,6 @@ public interface UserRepository {
 	public List<UserVo> searchForMultipleUsers();
 	public UserVo insertUser(UserVo user);
 	public void updateUser(UserVo user);
-	public void deleteUser(UserVo user);
 	
 	public static class DefaultJdbcUserRepository implements UserRepository {
 		
@@ -22,6 +21,7 @@ public interface UserRepository {
 		public final String selectUserById = "SELECT id,email,password FROM user WHERE id=?";
 		public final String selectUserByEmail = "SELECT id,email,password FROM user WHERE email=?";
 		public final String insertUser = "INSERT INTO user (id,email,password) VALUES (?,?,?)";
+		public final String updateUser = "UPDATE user SET id = ?, email = ?,password = ?,  WHERE id = ?";
 		
 		private DataInputMapper<UserVo> userInput = (resultSet) -> {
 			return new UserVo(resultSet.getInt("id"),resultSet.getString("email"), resultSet.getString("password"));
@@ -41,9 +41,8 @@ public interface UserRepository {
 		}
 
 		@Override
-		public UserVo searchUser(String searchString) {
-			// TODO Auto-generated method stub
-			return null;
+		public UserVo searchUser(String email) {
+			return repository.querryForObjectPreparedStaement(selectUserByEmail, userInput, email);
 		}
 
 		@Override
@@ -60,15 +59,9 @@ public interface UserRepository {
 
 		@Override
 		public void updateUser(UserVo user) {
-			// TODO Auto-generated method stub
-			
+			repository.updateObject(updateUser, userOutput.mapper(user), user.userId());
 		}
 
-		@Override
-		public void deleteUser(UserVo user) {
-			// TODO Auto-generated method stub
-			
-		}
 	}
 
 }

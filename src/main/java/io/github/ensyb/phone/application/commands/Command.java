@@ -1,12 +1,10 @@
 package io.github.ensyb.phone.application.commands;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import io.github.ensyb.phone.application.controller.ViewModel;
+import io.github.ensyb.phone.application.controller.Request;
+import io.github.ensyb.phone.application.controller.response.Response;
 
 public interface Command {
 	
-	ViewModel execute(HttpServletRequest request, HttpServletResponse response);
+	Response execute(Request request);
 	
 }

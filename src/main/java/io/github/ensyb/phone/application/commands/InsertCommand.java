@@ -7,15 +7,17 @@ import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
 import io.github.ensyb.phone.domain.user.repository.UserRepository;
 import io.github.ensyb.phone.domain.user.vo.UserVo;
 
-public class TestCommand implements Command {
+public class InsertCommand implements Command {
 
 	@Override
 	public Response execute(Request request) {
-		int id = Integer.parseInt(request.getParameter("id"));
+		
+		UserVo user = new UserVo("neki@test.com", "imaPaswordaDvjesta");
 		
 		UserRepository rep = new UserRepository.DefaultJdbcUserRepository(
 				new CommonJdbcRepository(request.useDataSource()));
-		UserVo user = rep.searchUser(id);
+		
+		user = rep.insertUser(user);
 		
 		request.setAttribute("user", user);
 		return new Forward("WEB-INF/view/this.jsp");

@@ -15,8 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import io.github.ensyb.phone.application.commands.Command;
 import io.github.ensyb.phone.application.commands.NotFoundCommand;
+import io.github.ensyb.phone.application.controller.response.Forward;
+import io.github.ensyb.phone.application.controller.response.Redirect;
+import io.github.ensyb.phone.application.controller.response.Response;
+import io.github.ensyb.phone.application.controller.response.Write;
 
-@WebServlet(urlPatterns = "*.html", loadOnStartup = 1, initParams = @WebInitParam(name = "mapingFileName", value = "routs.properties"))
+@WebServlet(urlPatterns = {"*.html" }, 
+            loadOnStartup = 1, initParams = @WebInitParam(name = "mapingFileName", value = "routs.properties"))
 public class FrontController extends HttpServlet {
 
 	private static final long serialVersionUID = 1995509432339266054L;
@@ -72,16 +77,21 @@ public class FrontController extends HttpServlet {
 			command = new NotFoundCommand();
 		}
 		try {
-			ViewModel viewModel = command.execute(request, response);
-			if (viewModel.isForRedirect()){
-				response.sendRedirect(viewModel.consumePath());
-			}
-			else{
-				// dodaj flash messages :) za proslijedit
-				request.getRequestDispatcher(viewModel.consumePath()).forward(request, response);
-			}
+			Response viewModel = command.execute(new Request(request, response));
+			doAction(viewModel, request, response);
 		} catch (Exception e) {
 			throw new ControllerException(e);
+		}
+	}
+	
+	private void doAction(Response vm, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{
+		if(vm instanceof Redirect)
+			res.sendRedirect(vm.consumePath());
+		if(vm instanceof Forward)
+			// dodat flash mesages kasnije :) za proslijedit
+			req.getRequestDispatcher(vm.consumePath()).forward(req, res);
+		if(vm instanceof Write){
+			res.getWriter().println(vm.consumePath());
 		}
 	}
 

@@ -26,9 +26,17 @@ public class Request {
 	public void setAttribute(final String name, final Object object){
 		this.request.setAttribute(name, object);
 	}
+	
+	public void setAttributeInSession(final String name, final Object object){
+		this.request.getSession().setAttribute(name, object);
+	}
 
 	public Object getAttribute(final String name){
 		return this.request.getAttribute(name);
+	}
+	
+	public Object getAttributeFromSession(final String name){
+		return this.request.getSession().getAttribute(name);
 	}
 	
 	public String getParameter(final String name){

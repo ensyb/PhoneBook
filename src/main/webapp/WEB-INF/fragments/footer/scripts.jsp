@@ -7,4 +7,4 @@
 <script type="text/javascript"
 	src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 <script src="includes/js/register.js"></script>
-<script src="includes/js/app.js"></script>
+<script src="includes/js/login.js"></script>

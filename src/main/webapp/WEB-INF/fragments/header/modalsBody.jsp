@@ -5,20 +5,24 @@
                 <div class="modal fade loginModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
                     <div class="modal-dialog modal-md" role="document">
                         <div class="modal-content">
+                           <div class="modal-header" id="modalLoginHeader">
+                                <h3 class="text-center" id="login-main-message"></h3>
+                            </div>
                             <div class="modal-body">
-                                <form class="">
+                                <form method="POST" id="login-form">
+                                 <div id="errorLogin">  </div>
                                     <div class="form-group">
-                                        <label for="email">vaša email adresa</label>
-                                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="ovdje ide vaÅ¡a email adresa">
+                                        <label for="emailLogin">vaša email adresa</label>
+                                        <input type="email" class="form-control" id="emailLogin" aria-describedby="emailHelp" name="email" placeholder="ovdje ide vaša email adresa">
                                         <small id="emailHelp" class="form-text text-muted">vaša email adrese neće biti dijeljena </small>
                                     </div>
                                     <div class="form-group">
-                                        <label for="lozinka">vaša lozinka</label>
-                                        <input type="password" class="form-control" id="lozinka" placeholder="ovdje ide lozinka">
+                                        <label for="lozinkaLogin">vaša lozinka</label>
+                                        <input type="password" class="form-control" id="lozinkaLogin" name="password" placeholder="ovdje ide lozinka">
                                     </div>
 
 
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" id="login-Button" class="btn btn-primary">Submit</button>
                                 </form>
                             </div>
                             <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->

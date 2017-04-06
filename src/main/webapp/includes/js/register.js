@@ -1,8 +1,33 @@
-var Register = (function(){
+$('document').ready(function() {
 	
 	var defaults = {
 			registerBefore : '<span class="glyphicon glyphicon-transfer"></span> &nbsp; sending ...',
 	}
+	
+	$("#register-form").validate({
+		rules : {
+			email : {
+				required : true,
+				email : true
+			},
+			lozinka : {
+				required : true,
+				minlength : 5
+			}
+		},
+		messages : {
+			email : {
+				required : "morate unijeti email adresu",
+				email : "morate unijeti validnu email adresu"
+			},
+			lozinka : {
+				required : "morate unijeti lozinku",
+				minlength : "lozinka mora imati minilano 5 karaktera"
+			}
+		},
+		submitHandler : submit
+		
+		})
 	
 	function submit(){
 		var data = $("#register-form").serialize();
@@ -39,36 +64,8 @@ var Register = (function(){
 	                    });
 	            }
 	        });
+	     return false;
 	}
 	
-	function handleRegistration(){
-		$("#register-form").validate({
-			rules : {
-				email : {
-					required : true,
-					email : true
-				},
-				lozinka : {
-					required : true,
-					minlength : 5
-				}
-			},
-			messages : {
-				email : {
-					required : "morate unijeti email adresu",
-					email : "morate unijeti validnu email adresu"
-				},
-				lozinka : {
-					required : "morate unijeti lozinku",
-					minlength : "lozinka mora imati minilano 5 karaktera"
-				}
-			},
-			submitHandler : submit
-			
-			})
-		};
-		return {
-			handle : handleRegistration
-		};
-})();
+});
 	

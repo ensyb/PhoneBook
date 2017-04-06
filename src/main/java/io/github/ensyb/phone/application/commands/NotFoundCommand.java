@@ -1,8 +1,8 @@
 package io.github.ensyb.phone.application.commands;
 
-import io.github.ensyb.phone.application.controller.Request;
-import io.github.ensyb.phone.application.controller.response.Forward;
-import io.github.ensyb.phone.application.controller.response.Response;
+import io.github.ensyb.phone.application.dispatcher.Request;
+import io.github.ensyb.phone.application.dispatcher.response.Forward;
+import io.github.ensyb.phone.application.dispatcher.response.Response;
 
 public class NotFoundCommand implements Command{
 

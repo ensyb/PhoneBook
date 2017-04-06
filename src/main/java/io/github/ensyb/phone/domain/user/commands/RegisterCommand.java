@@ -3,10 +3,10 @@ package io.github.ensyb.phone.domain.user.commands;
 import org.mindrot.jbcrypt.BCrypt;
 
 import io.github.ensyb.phone.application.commands.Command;
-import io.github.ensyb.phone.application.controller.Request;
-import io.github.ensyb.phone.application.controller.response.Redirect;
-import io.github.ensyb.phone.application.controller.response.Response;
-import io.github.ensyb.phone.application.controller.response.Write;
+import io.github.ensyb.phone.application.dispatcher.Request;
+import io.github.ensyb.phone.application.dispatcher.response.Redirect;
+import io.github.ensyb.phone.application.dispatcher.response.Response;
+import io.github.ensyb.phone.application.dispatcher.response.Write;
 import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
 import io.github.ensyb.phone.application.validation.ValidationChecker;
 import io.github.ensyb.phone.domain.user.repository.UserRepository;

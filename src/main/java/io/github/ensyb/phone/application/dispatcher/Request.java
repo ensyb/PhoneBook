@@ -1,4 +1,4 @@
-package io.github.ensyb.phone.application.controller;
+package io.github.ensyb.phone.application.dispatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

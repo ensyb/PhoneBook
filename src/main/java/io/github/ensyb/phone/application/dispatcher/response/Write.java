@@ -1,4 +1,4 @@
-package io.github.ensyb.phone.application.controller.response;
+package io.github.ensyb.phone.application.dispatcher.response;
 
 public class Write implements Response {
 

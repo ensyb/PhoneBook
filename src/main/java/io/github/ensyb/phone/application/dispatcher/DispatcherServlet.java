@@ -1,4 +1,4 @@
-package io.github.ensyb.phone.application.controller;
+package io.github.ensyb.phone.application.dispatcher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import io.github.ensyb.phone.application.commands.Command;
 import io.github.ensyb.phone.application.commands.NotFoundCommand;
-import io.github.ensyb.phone.application.controller.response.Forward;
-import io.github.ensyb.phone.application.controller.response.Redirect;
-import io.github.ensyb.phone.application.controller.response.Response;
-import io.github.ensyb.phone.application.controller.response.Write;
+import io.github.ensyb.phone.application.dispatcher.response.Forward;
+import io.github.ensyb.phone.application.dispatcher.response.Redirect;
+import io.github.ensyb.phone.application.dispatcher.response.Response;
+import io.github.ensyb.phone.application.dispatcher.response.Write;
 
 @WebServlet(urlPatterns = {"*.html" }, 
             loadOnStartup = 1, initParams = @WebInitParam(name = "mapingFileName", value = "routs.properties"))
-public class FrontController extends HttpServlet {
+public class DispatcherServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1995509432339266054L;
 
@@ -46,11 +46,10 @@ public class FrontController extends HttpServlet {
 
 		try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(routsFileName)) {
 			if (stream == null) {
-				throw new ControllerException(
+				throw new DispatcherException(
 						"nemoze pronaci routs file na classpathu");
 			}
 			properties.load(stream);
-			// ref
 			for (Object key : properties.keySet()) {
 				String command = (String) key;
 				String handlerClassName = properties.getProperty(command);
@@ -59,12 +58,12 @@ public class FrontController extends HttpServlet {
 					Command handlerInstance = (Command) handlerClass.newInstance();
 					commandMapping.put(command, handlerInstance);
 				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-					throw new ControllerException(e);
+					throw new DispatcherException(e);
 				}
 			}
 
 		} catch (IOException e) {
-			throw new ControllerException(e);
+			throw new DispatcherException(e);
 		}
 	}
 
@@ -80,7 +79,7 @@ public class FrontController extends HttpServlet {
 			Response viewModel = command.execute(new Request(request, response));
 			doAction(viewModel, request, response);
 		} catch (Exception e) {
-			throw new ControllerException(e);
+			throw new DispatcherException(e);
 		}
 	}
 	

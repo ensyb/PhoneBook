@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import io.github.ensyb.phone.application.controller.response.Forward;
-import io.github.ensyb.phone.application.controller.response.Redirect;
-import io.github.ensyb.phone.application.controller.response.Response;
+import io.github.ensyb.phone.application.dispatcher.response.Forward;
+import io.github.ensyb.phone.application.dispatcher.response.Redirect;
+import io.github.ensyb.phone.application.dispatcher.response.Response;
 
 public class ResponseTest {
 

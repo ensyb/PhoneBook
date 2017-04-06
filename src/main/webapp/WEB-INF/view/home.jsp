@@ -3,10 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
-<c:import url="fragments/header/head.jsp"></c:import>
+<c:import url="../fragments/header/head.jsp"></c:import>
 <body class="homeBody">
 
-<c:import url="fragments/header/userNavHeader.jsp"></c:import>
+<c:import url="../fragments/header/userNavHeader.jsp"></c:import>
 
 
     <div class="container">
@@ -102,7 +102,7 @@
             </div>
         </div>
         </div>
-	<c:import url="fragments/footer/scripts.jsp"></c:import>
+	<c:import url="../fragments/footer/scripts.jsp"></c:import>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-package io.github.ensyb.phone.application;
+package io.github.ensyb.phone.application.validation;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,5 +1,6 @@
 package io.github.ensyb.phone.domain.user.commands;
 
+import org.mindrot.jbcrypt.BCrypt;
 
 import io.github.ensyb.phone.application.commands.Command;
 import io.github.ensyb.phone.application.controller.Request;
@@ -7,43 +8,31 @@ import io.github.ensyb.phone.application.controller.response.Redirect;
 import io.github.ensyb.phone.application.controller.response.Response;
 import io.github.ensyb.phone.application.controller.response.Write;
 import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
+import io.github.ensyb.phone.application.validation.ValidationChecker;
 import io.github.ensyb.phone.domain.user.repository.UserRepository;
 import io.github.ensyb.phone.domain.user.vo.UserVo;
 
 public class RegisterCommand implements Command {
 
-	//ovo popravit -- ovo je samo da vidim dali radi 
-
 	@Override
 	public Response execute(Request request) {
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		if (!request.isRequestAjax()) 
+			return new Redirect("index.jsp");
+
+		UserVo user = new UserVo(request.getParameter("email"), request.getParameter("password"));
+		ValidationChecker checker = new ValidationChecker(user);
 		
-		if(isValid(email, password)){	
-			UserVo user = new UserVo(email, password);
-		
-			if(request.isRequestAjax()){
+		if (checker.generateReport().isEmpty()) {
+				user = user.updatePassword(BCrypt.hashpw(user.userPassword(), BCrypt.gensalt(12)));
 				UserRepository rep = new UserRepository.DefaultJdbcUserRepository(
 						new CommonJdbcRepository(request.useDataSource()));
-				
+
 				user = rep.insertUser(user);
-				if(user.userId() > 0)
+				if (user.userId() > 0)
 					return new Write("success");
-			}
-			return new Redirect("index.jsp");
-			
-		}else
-			return new Write("ovdje cu napisat zbog cega nije validno");
+		}
+		return new Write(checker.generateReport());
 		
-	}
-	
-	//napravi validator, ovo je privremeno :)
-	private boolean isValid(final String email, final String password){
-		if(!email.contains("@"))
-			return false;
-		if(password.length() < 5)
-			return false;
-		return true;
 	}
 
 }

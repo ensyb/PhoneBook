@@ -15,6 +15,7 @@ var Register = (function(){
 	                $("#registerDugme").html(defaults.registerBefore);
 	            },
 	            success :  function(data){
+	            	console.log(data);
 	               if(data.trim() == "success"){
 	                    $("#register-form").fadeOut(600, function(){ 
 	                    	$("#register-main-message").html(
@@ -25,12 +26,18 @@ var Register = (function(){
 	                    }, 1500);
 
 	                }
-	                else if(data != "success"){
+	                else {
 	                    $("#error").fadeIn(1000, function(){
-	                        $("#error").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> &nbsp; '+data+' !</div>');
-	                        $("#btn-submit").html('<span class="glyphicon glyphicon-log-in"></span> &nbsp; Create Account');
+	                    	$("#registerDugme").html('Submit');
+	                        $("#error").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> '+data+' !</div>');
+	                        console.log($("#registerDugme"));
 	                    });
 	                }
+	            },
+	            error: function(xhr, textStatus, error){
+	            	  $("#error").fadeIn(1000, function(){
+	                        $("#error").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> registration failed !</div>');
+	                    });
 	            }
 	        });
 	}

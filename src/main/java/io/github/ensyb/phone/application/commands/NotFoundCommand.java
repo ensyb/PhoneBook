@@ -9,7 +9,7 @@ public class NotFoundCommand implements Command{
 	@Override
 	public Response execute(Request request) {
 		//u malom vrtu raste divlji plod
-		return new Forward("WEB-INF/index.jsp");
+		return new Forward("index.jsp");
 	}
 
 }

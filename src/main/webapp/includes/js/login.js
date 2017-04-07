@@ -39,7 +39,7 @@ $('document').ready(function() {
 	                else {
 	                    $("#errorLogin").fadeIn(1000, function(){
 	                    	$("#login-Button").html('Submit');
-	                        $("#error").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> '+data+' !</div>');
+	                        $("#errorLogin").html('<div class="alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span> '+data+' !</div>');
 	                    });
 	                }
 	            },

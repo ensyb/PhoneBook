@@ -1,4 +1,4 @@
-package io.github.ensyb.phone.application.repository;
+package io.github.ensyb.phone.application.repository.mappers;
 
 @FunctionalInterface
 public interface DataOutputMapper<Type> {

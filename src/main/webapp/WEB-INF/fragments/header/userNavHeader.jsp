@@ -21,7 +21,7 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Dodaj novi kontakt</a></li>
-                    <li><a href="#"><span class="fa fa-sign-in"></span> Odjavi se</a></li>
+                    <li><a href="logout.html"><span class="fa fa-sign-in"></span> Odjavi se</a></li>
 
                 </ul>
             </div>

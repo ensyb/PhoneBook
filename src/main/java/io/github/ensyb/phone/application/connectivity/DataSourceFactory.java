@@ -4,21 +4,41 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import io.github.ensyb.phone.application.configuration.DatabaseConnectionConfiguration;
 
-class DataSourceFactory {
+public final class DataSourceFactory {
 
-	private final BasicDataSource dataSource;
-	private final int defaultInitialPoolSize = 5;
+	private final DatabaseConnectionConfiguration databaseUrl;
+	private final String username;
+	private final String password;
 	
+
 	public DataSourceFactory(DatabaseConnectionConfiguration databaseUrl, String username, String password) {
-		this.dataSource = new BasicDataSource();
-		this.dataSource.setDriverClassName(databaseUrl.driverClassName());
-		this.dataSource.setUrl(databaseUrl.databaseConnectionUrl());
-		this.dataSource.setUsername(username);
-		this.dataSource.setPassword(password);
-		this.dataSource.setInitialSize(this.defaultInitialPoolSize);
+		this.databaseUrl = databaseUrl;
+		this.username = username;
+		this.password = password;
+
 	}
 	
-	public BasicDataSource consumeDataSource(){
-		return this.dataSource;
+	public BasicDataSource consumeDataSource(final int poolSize){
+		return this.setupDS(poolSize);
 	}
+	
+	public BasicDataSource consumeDataSourceForTest(){
+		BasicDataSource source = setupDS(1);
+		source.setEnableAutoCommitOnReturn(false);
+		source.setRollbackOnReturn(true);
+		return source;
+	}
+	
+	
+	private BasicDataSource setupDS(final int poolSize){
+		BasicDataSource source = new BasicDataSource();
+		source.setDriverClassName(databaseUrl.driverClassName());
+		source.setUrl(databaseUrl.databaseConnectionUrl());
+		source.setUsername(username);
+		source.setPassword(password);
+		
+		source.setInitialSize(poolSize);
+		return source;
+	}
+
 }

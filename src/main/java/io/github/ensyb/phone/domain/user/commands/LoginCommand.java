@@ -20,7 +20,7 @@ public class LoginCommand implements Command{
 			return new Forward("index");
 		
 		UserRepository rep = new UserRepository.DefaultJdbcUserRepository(
-				new CommonJdbcRepository(request.useDataSource()));
+				new CommonJdbcRepository.Repository(request.useDataSource()));
 		UserVo user = rep.searchUser(request.getParameter("email"));
 		if(user == null)
 			return new Write("korisnik sa "+ request.getParameter("email")+" ne postoji");			

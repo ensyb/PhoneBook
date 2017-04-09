@@ -25,7 +25,7 @@ public class RegisterCommand implements Command {
 		if (checker.generateReport().isEmpty()) {
 				user = user.updatePassword(BCrypt.hashpw(user.userPassword(), BCrypt.gensalt(12)));
 				UserRepository rep = new UserRepository.DefaultJdbcUserRepository(
-						new CommonJdbcRepository(request.useDataSource()));
+						new CommonJdbcRepository.Repository(request.useDataSource()));
 
 				user = rep.insertUser(user);
 				if (user.userId() > 0)

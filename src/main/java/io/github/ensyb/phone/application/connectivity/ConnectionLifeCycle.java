@@ -33,7 +33,7 @@ public class ConnectionLifeCycle implements ServletContextListener {
 					new DatabaseConnectionConfiguration.MysqlConfiguration(properties.getProperty("dbHost"),
 							properties.getProperty("dbName"), Integer.parseInt(properties.getProperty("port"))),
 					properties.getProperty("username"), properties.getProperty("password"));
-			context.setAttribute("dataSource", dataF.consumeDataSource());
+			context.setAttribute("dataSource", dataF.consumeDataSource(4));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

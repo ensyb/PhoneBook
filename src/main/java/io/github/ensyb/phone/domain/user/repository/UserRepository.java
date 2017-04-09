@@ -3,8 +3,8 @@ package io.github.ensyb.phone.domain.user.repository;
 import java.util.List;
 
 import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
-import io.github.ensyb.phone.application.repository.DataInputMapper;
-import io.github.ensyb.phone.application.repository.DataOutputMapper;
+import io.github.ensyb.phone.application.repository.mappers.DataInputMapper;
+import io.github.ensyb.phone.application.repository.mappers.DataOutputMapper;
 import io.github.ensyb.phone.domain.user.vo.UserVo;
 
 public interface UserRepository {
@@ -17,11 +17,11 @@ public interface UserRepository {
 	
 	public static class DefaultJdbcUserRepository implements UserRepository {
 		
-		public final CommonJdbcRepository repository;
-		public final String selectUserById = "SELECT id,email,password FROM user WHERE id=?";
-		public final String selectUserByEmail = "SELECT id,email,password FROM user WHERE email=?";
-		public final String insertUser = "INSERT INTO user (id,email,password) VALUES (?,?,?)";
-		public final String updateUser = "UPDATE user SET id = ?, email = ?,password = ?,  WHERE id = ?";
+		private final CommonJdbcRepository repository;
+		private final String selectUserById = "SELECT id,email,password FROM user WHERE id=?";
+		private final String selectUserByEmail = "SELECT id,email,password FROM user WHERE email=?";
+		private final String insertUser = "INSERT INTO user (id,email,password) VALUES (?,?,?)";
+		private final String updateUser = "UPDATE user SET id = ?, email = ?,password = ?,  WHERE id = ?";
 		
 		private DataInputMapper<UserVo> userInput = (resultSet) -> {
 			return new UserVo(resultSet.getInt("id"),resultSet.getString("email"), resultSet.getString("password"));

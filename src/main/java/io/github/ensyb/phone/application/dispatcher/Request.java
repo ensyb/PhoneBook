@@ -43,5 +43,10 @@ public class Request {
 		return this.request.getParameter(name);
 	}
 	
+	public void closeSession(){
+		this.request.getSession().invalidate();
+		this.request.getSession(false);
+	}
+	
 	
 }

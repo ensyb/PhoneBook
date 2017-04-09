@@ -3,106 +3,99 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
-<c:import url="../fragments/header/head.jsp"></c:import>
+<%@ include file="../fragments/header/head.jsp"%>
 <body class="homeBody">
 
-<c:import url="../fragments/header/userNavHeader.jsp"></c:import>
+	<%@ include file="../fragments/header/home/userNavHeader.jsp"%>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="row">
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="row">
+					<div class="col-lg-12 text-center">
+						<form class="form-inline" method="get" action="search.html">
+							<label for="inlineFormInput">Kontakt : </label> <input
+								type="text" name="searchString"
+								class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+								placeholder="fujo..">
+							<button type="submit" class="btn btn-primary">Trazi</button>
+						<a class="btn btn-primary" href="showAll.html" >prikaži sve</a>
+						</form>
+					</div>
+					<div class="col-lg-12">
+						<hr>
+					</div>
 
-                    <div class="col-lg-12 text-center">
-                        <form class="form-inline">
-                            <label for="inlineFormInput">Kontakt : </label>
-                            <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="fujo..">
+					<c:if test="${searchList == null}">
+						<h3 class="text-center">pretraži</h3>
+					</c:if>
+					<c:if test="${searchList.isEmpty()}">
+						<h3 class="text-center">nema rezultata</h3>
+					</c:if>
 
-            
+					<%@ include file="../fragments/header/home/addKontaktModal.jsp"%>
 
-                            <button type="submit" class="btn btn-primary">Trazi</button>
-                        </form>
-                    </div>
-                    <div class="col-lg-12">
-                        <hr>
-                    </div>
+					<c:if test="${!searchList.isEmpty()}">
+						<c:forEach items="${searchList}" var="item">
+							<div class="col-sm-6 col-md-4">
+								<div class="thumbnail">
+									<img src="http://placehold.it/240x240" alt="slika">
+									<div class="caption">
+										<h3>${item.name()}</h3>
+										<h3>${item.phoneNumber()}</h3>
+										<p>${item.description()}</p>
+										<form class="form-inline" method="POST" action="delete.html">
+											<a href="#" class="btn btn-info" data-toggle="modal"
+												data-target=".editButton">Uredi</a> <input type="hidden"
+												name="id" value="${item.id()}"> 
+												<button type="submit" class="btn btn-danger">Izbriš</button>
+										</form>
+									</div>
+								</div>
 
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/240x240" alt="slika">
-                            <div class="caption">
-                                <h3>Ime i Prezime</h3>
-                                <h3>012-222-222</h3>
-                                <p>Kratki opis ovo ono sit amet, consectetur adipisicing elit. Ab non nisi fugit perferendis
-                                    quos, inventore, voluptate, temporibus impedit iste corrupti et sapiente.</p>
-                                <p>
-                                    <a href="#" class="btn btn-info" data-toggle="modal" data-target=".editButton">Uredi</a>
-                                    <a href="#" class="btn btn-danger" role="button">IzbriÅ¡i</a></p>
-                            </div>
-                        </div>
+								<div class="modal fade editButton" tabindex="-1" role="dialog"
+									aria-labelledby="mySmallModalLabel">
+									<div class="modal-dialog modal-sm" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<form method="POST" action="update.html">
+													<div class="form-group">
+														<label for="editKontaktIme">Ime </label> <input
+															type="text" class="form-control" name="name"
+															id="editKontaktIme" aria-describedby="emailHelp"
+															value="${item.name()}">
+													</div>
+													<div class="form-group">
+														<label for="editKontaktPhonenumber">Broj telefona</label>
+														<input type="text" class="form-control" name="phonenumber"
+															id="editKontaktPhonenumber" value="${item.phoneNumber()}">
+													</div>
+													<div class="form-group">
+														<label for="editKontaktDescription">opis</label>
+														<textarea class="form-control" name="description"
+															name="description" id="editKontaktDescription">${item.description()}</textarea>
+													</div>
+													<input type="hidden" name="id" value="${item.id()}">
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
 
-                        <div class="modal fade editButton" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-                            <div class="modal-dialog modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <form class="">
-                                            <div class="form-group">
-                                                <label for="imeprezime">Ime i prezime</label>
-                                                <input type="text" class="form-control" id="imeprezime" aria-describedby="emailHelp" placeholder="novo ime i prezime">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="broj">Broj telefona</label>
-                                                <input type="text" class="form-control" id="broj" placeholder="novi broj telefona">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="opis">opis</label>
-                                                <input type="textarea" class="form-control" id="opis" placeholder="kratki opis">
-                                            </div>
+							</div>
+
+						</c:forEach>
+					</c:if>
 
 
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/240x240" alt="slika">
-                            <div class="caption">
-                                <h3>Ime i Prezime</h3>
-                                <h3>012-222-222</h3>
-                                <p>Kratki opis ovo ono sit amet, consectetur adipisicing elit. Ab non nisi fugit perferendis
-                                    quos, inventore, voluptate, temporibus impedit iste corrupti et sapiente.</p>
-                                <p>
-                                    <a href="#" class="btn btn-info" role="button">Uredi</a>
-                                    <a href="#" class="btn btn-danger" role="button">IzbriÅ¡i</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/240x240" alt="slika">
-                            <div class="caption">
-                                <h3>Ime i Prezime</h3>
-                                <h3>012-222-222</h3>
-                                <p>Kratki opis ovo ono sit amet, consectetur adipisicing elit. Ab non nisi fugit perferendis
-                                    quos, inventore, voluptate, temporibus impedit iste corrupti et sapiente.</p>
-                                <p>
-                                    <a href="#" class="btn btn-info" role="button">Uredi</a>
-                                    <a href="#" class="btn btn-danger" role="button">IzbriÅ¡i</a></p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        </div>
-	<c:import url="../fragments/footer/scripts.jsp"></c:import>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%@ include file="../fragments/footer/scripts.jsp"%>
 </body>
 
 </html>

@@ -5,7 +5,8 @@
 <html lang="en">
 <c:import url="../fragments/header/head.jsp"></c:import>
 <body class="indexBody">
-	<c:import url="../fragments/header/navigationHeader.jsp"></c:import>
+
+	<%@ include file="../fragments/header/navigationHeader.jsp" %>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
@@ -13,12 +14,12 @@
 					<h1>WEB IMENIK</h1>
 					<h2>telefonski imenik na webu, kome to još treba ?</h2>
 					<hr>
-					<button class="btn btn-default btn-lg">istraži</button>
+					<a href="about.html" class="btn btn-default btn-lg">istraži</a>
 				</div>
 			</div>
 		</div>
-		<c:import url="../fragments/header/modalsBody.jsp"></c:import>
+		<%@ include file="../fragments/header/modalsBody.jsp" %>
 	</div>
-	<c:import url="../fragments/footer/scripts.jsp"></c:import>
+	<%@ include file="../fragments/footer/scripts.jsp" %>
 </body>
 </html>

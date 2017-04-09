@@ -3,10 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
-<c:import url="../fragments/header/head.jsp"></c:import>
+<%@ include file="../fragments/header/head.jsp" %>
 <body class="aboutBody">
 
-<c:import url="../fragments/header/navigationHeader.jsp"></c:import>
+<%@ include file="../fragments/header/navigationHeader.jsp" %>
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -22,8 +22,8 @@
                 </div>
             </div>
         </div>
-        <c:import url="../fragments/header/modalsBody.jsp"></c:import>
+        <%@ include file="../fragments/header/modalsBody.jsp" %>
     </div>
-	<c:import url="../fragments/footer/scripts.jsp"></c:import>
+	<%@ include file="../fragments/footer/scripts.jsp" %>
 </body>
 </html>

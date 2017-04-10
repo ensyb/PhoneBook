@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import io.github.ensyb.phone.application.commands.Command;
 import io.github.ensyb.phone.application.commands.NotFoundCommand;
+import io.github.ensyb.phone.application.dispatcher.request.Request;
 import io.github.ensyb.phone.application.dispatcher.response.Forward;
 import io.github.ensyb.phone.application.dispatcher.response.Redirect;
 import io.github.ensyb.phone.application.dispatcher.response.Response;
@@ -76,7 +77,7 @@ public class DispatcherServlet extends HttpServlet {
 			command = new NotFoundCommand();
 		}
 		try {
-			Response viewModel = command.execute(new Request(request, response));
+			Response viewModel = command.execute(new Request.PhonebookRequest(request, response));
 			doAction(viewModel, request, response);
 		} catch (Exception e) {
 			throw new DispatcherException(e);

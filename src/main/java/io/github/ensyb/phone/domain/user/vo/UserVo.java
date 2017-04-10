@@ -1,5 +1,7 @@
 package io.github.ensyb.phone.domain.user.vo;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import io.github.ensyb.phone.application.validation.Validate;
 import io.github.ensyb.phone.domain.user.vo.validate.EmailValidator;
 import io.github.ensyb.phone.domain.user.vo.validate.PasswordValidator;
@@ -35,15 +37,7 @@ public class UserVo {
 		return this.password;
 	}
 	
-	public UserVo updateId(final int id){
-		return new UserVo(id, this.email, this.password);
-	}
-	
-	public UserVo updateEmail(final String email){
-		return new UserVo(this.id, email, this.password);
-	}
-	
-	public UserVo updatePassword(final String password){
-		return new UserVo(this.id, this.email, password);
+	public UserVo createPassword(final String password){
+		return new UserVo(this.id, this.email, BCrypt.hashpw(password, BCrypt.gensalt(12)));
 	}
 }

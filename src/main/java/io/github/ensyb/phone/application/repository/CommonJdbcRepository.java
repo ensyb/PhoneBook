@@ -22,13 +22,13 @@ public interface CommonJdbcRepository {
 	public <Type> List<Type> querryForListPreparedStaement(String sql, DataInputMapper<Type> mapper,
 			Object... preparedStatementParametars);
 
-	public <Type> int insertObjectReturnKey(String sql, Object[] outputMapperValues);
+	public int insertObjectReturnKey(String sql, Object[] outputMapperValues);
 
-	public <Type> void insertObject(String sql, Object[] outputMapperValues);
+	public void insertObject(String sql, Object[] outputMapperValues);
 
-	public <Type> void updateObject(String sql, Object[] outputMapperValues, Object... idObject);
+	public void updateObject(String sql, Object[] outputMapperValues, Object... idObject);
 
-	public <Type> void deleteObject(String sql, Object... idObject);
+	public void deleteObject(String sql, Object... idObject);
 
 	public static class Repository implements CommonJdbcRepository {
 		private final BasicDataSource source;
@@ -75,7 +75,7 @@ public interface CommonJdbcRepository {
 			return listOfBeans;
 		}
 
-		public <Type> int insertObjectReturnKey(String sql, Object[] outputMapperValues) {
+		public int insertObjectReturnKey(String sql, Object[] outputMapperValues) {
 			int generatedKey = 0;
 			try (Connection connection = source.getConnection();
 					PreparedStatement statement = prepare.createPrepareStatement(connection, sql, true,
@@ -96,7 +96,7 @@ public interface CommonJdbcRepository {
 			return generatedKey;
 		}
 
-		public <Type> void insertObject(String sql, Object[] outputMapperValues) {
+		public void insertObject(String sql, Object[] outputMapperValues) {
 			try (Connection connection = source.getConnection();
 					PreparedStatement statement = prepare.createPrepareStatement(connection, sql, false,
 							outputMapperValues)) {
@@ -108,7 +108,7 @@ public interface CommonJdbcRepository {
 			}
 		}
 
-		public <Type> void updateObject(String sql, Object[] outputMapperValues, Object... idObject) {
+		public void updateObject(String sql, Object[] outputMapperValues, Object... idObject) {
 			Object[] prepareStatementValues = Stream.concat(Arrays.stream(outputMapperValues), Arrays.stream(idObject))
 					.toArray(Object[]::new);
 
@@ -125,7 +125,7 @@ public interface CommonJdbcRepository {
 			}
 		}
 
-		public <Type> void deleteObject(String sql, Object... idObject) {
+		public void deleteObject(String sql, Object... idObject) {
 
 			try (Connection connection = source.getConnection();
 					PreparedStatement statement = prepare.createPrepareStatement(connection, sql, false, idObject)) {

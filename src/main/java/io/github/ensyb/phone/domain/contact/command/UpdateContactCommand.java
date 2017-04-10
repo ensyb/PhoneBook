@@ -4,7 +4,7 @@ import java.util.List;
 
 
 import io.github.ensyb.phone.application.commands.Command;
-import io.github.ensyb.phone.application.dispatcher.Request;
+import io.github.ensyb.phone.application.dispatcher.request.Request;
 import io.github.ensyb.phone.application.dispatcher.response.Redirect;
 import io.github.ensyb.phone.application.dispatcher.response.Response;
 import io.github.ensyb.phone.application.repository.CommonJdbcRepository;

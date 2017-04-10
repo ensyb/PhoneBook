@@ -2,7 +2,7 @@ package io.github.ensyb.phone.application.connectivity;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import io.github.ensyb.phone.application.configuration.DatabaseConnectionConfiguration;
+import io.github.ensyb.phone.application.configuration.database.DatabaseConnectionConfiguration;
 
 public final class DataSourceFactory {
 

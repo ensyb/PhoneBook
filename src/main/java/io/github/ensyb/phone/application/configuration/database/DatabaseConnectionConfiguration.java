@@ -1,4 +1,4 @@
-package io.github.ensyb.phone.application.configuration;
+package io.github.ensyb.phone.application.configuration.database;
 
 public interface DatabaseConnectionConfiguration{
 	public String databaseConnectionUrl();

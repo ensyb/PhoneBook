@@ -9,7 +9,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import io.github.ensyb.phone.application.configuration.DatabaseConnectionConfiguration;
+import org.apache.commons.dbcp2.BasicDataSource;
+
+import io.github.ensyb.phone.application.configuration.database.DatabaseConnectionConfiguration;
+import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
 
 @WebListener
 public class ConnectionLifeCycle implements ServletContextListener {
@@ -33,7 +36,12 @@ public class ConnectionLifeCycle implements ServletContextListener {
 					new DatabaseConnectionConfiguration.MysqlConfiguration(properties.getProperty("dbHost"),
 							properties.getProperty("dbName"), Integer.parseInt(properties.getProperty("port"))),
 					properties.getProperty("username"), properties.getProperty("password"));
-			context.setAttribute("dataSource", dataF.consumeDataSource(4));
+			//ovo 4 nebi trebalo bit hardcoded
+			BasicDataSource dataSource = dataF.consumeDataSource(4);
+			context.setAttribute("dataSource", dataSource);
+			
+			CommonJdbcRepository repository = new CommonJdbcRepository.Repository(dataSource);
+			context.setAttribute("repository", repository);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

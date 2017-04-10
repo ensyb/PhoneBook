@@ -54,7 +54,7 @@ public interface UserRepository {
 		@Override
 		public UserVo insertUser(UserVo user) {
 			int generatedId = repository.insertObjectReturnKey(insertUser, userOutput.mapper(user));
-			return user.updateId(generatedId);
+			return new UserVo(generatedId, user.userEmail(), user.userPassword());
 		}
 
 		@Override

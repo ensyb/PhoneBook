@@ -138,9 +138,9 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 			Object... preparedStatementParametars) {
 		this.throwIfUowIsEmpty("da bi testirali select morate prvo pozvati insert..(...) na repository objektu");
 		Type object = null;
-		Connection connection = getConnection();
 
 		try {
+			Connection connection = getConnection();
 			this.insertForSelection(connection);
 			PreparedStatement statement = preparedStatement.createPrepareStatement(connection, sql, false,
 					preparedStatementParametars);
@@ -148,10 +148,10 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 			if (result.next()) {
 				object = mapper.mapper(result);
 			}
+			result.close();
+			this.closeConnection(connection);
 		} catch (SQLException e) {
 			System.out.println(e);
-		} finally {
-			this.closeConnection(connection);
 		}
 		return object;
 	}
@@ -170,68 +170,64 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 			while (result.next()) {
 				listOfBeans.add(mapper.mapper(result));
 			}
+			this.closeConnection(connection);
 		} catch (SQLException e) {
 			System.out.println(e);
-		}finally{
-			this.closeConnection(connection);
 		}
 		return listOfBeans;
 	}
 
 	@Override
-	public <Type> int insertObjectReturnKey(String sql, Object[] outputMapperValues) {
+	public int insertObjectReturnKey(String sql, Object[] outputMapperValues) {
 		this.insertDataHolder.insertData(new TestDataPair(sql, outputMapperValues));
 		int generatedKey = 0;
-		Connection connection = getConnection();
 		try {
+			Connection connection = getConnection();
 			PreparedStatement statement = preparedStatement.createPrepareStatement(connection, sql, true,
 					outputMapperValues);
 			int affectedRows = statement.executeUpdate();
 			if (affectedRows == 0)
 				throw new CommonJdbcRepositoryForTestException("repository insert failed, no rows affected.");
-			try (ResultSet res = statement.getGeneratedKeys()) {
-				if (res.next()) {
-					generatedKey = res.getInt(1);
-				} else {
-					throw new CommonJdbcRepositoryForTestException("repository failed to return generated key");
-				}
+			ResultSet res = statement.getGeneratedKeys();
+			if (res.next()) {
+				generatedKey = res.getInt(1);
+			} else {
+				throw new CommonJdbcRepositoryForTestException("repository failed to return generated key");
 			}
+
+			closeConnection(connection);
 		} catch (SQLException e) {
 			System.out.println(e);
-		} finally {
-			closeConnection(connection);
 		}
 		return generatedKey;
 	}
 
 	@Override
-	public <Type> void insertObject(String sql, Object[] outputMapperValues) {
+	public void insertObject(String sql, Object[] outputMapperValues) {
 		this.insertDataHolder.insertData(new TestDataPair(sql, outputMapperValues));
-		Connection connection = getConnection();
 		try {
+			Connection connection = getConnection();
 			PreparedStatement statement = preparedStatement.createPrepareStatement(connection, sql, false,
 					outputMapperValues);
 			int affectedRows = statement.executeUpdate();
 			if (affectedRows == 0)
 				throw new CommonJdbcRepositoryForTestException("repository insert failed, no rows affected.");
+			closeConnection(connection);
 		} catch (SQLException e) {
 			System.out.println(e);
-		} finally {
-			closeConnection(connection);
 		}
 	}
 
 	@Override
-	public <Type> void updateObject(String sql, Object[] outputMapperValues, Object... idObject) {
+	public void updateObject(String sql, Object[] outputMapperValues, Object... idObject) {
 		Object[] prepareStatementValues = Stream.concat(Arrays.stream(outputMapperValues), Arrays.stream(idObject))
 				.toArray(Object[]::new);
 		this.throwIfUowIsEmpty("da bi testirali update prvo morate pozvati insert...(...) u repository objekat");
-		Connection connection = getConnection();
 		try {
-
+			Connection connection = getConnection();
 			TestDataPair currentInsertedPair = this.insertDataHolder.getLastInsertedTestData();
 			this.insertForUpdateAndDelete(connection);
-			
+
 			PreparedStatement statement = preparedStatement.createPrepareStatement(connection, sql, false,
 					prepareStatementValues);
 			int affectedRows = statement.executeUpdate();
@@ -239,15 +235,14 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 				throw new CommonJdbcRepositoryForTestException("repository update failed, no rows affected.");
 
 			this.updateDataHolderForInsert.insertData(new TestDataPair(currentInsertedPair.sql, outputMapperValues));
+			closeConnection(connection);
 		} catch (SQLException e) {
 			System.out.println(e);
-		} finally {
-			closeConnection(connection);
 		}
 	}
 
 	@Override
-	public <Type> void deleteObject(String sql, Object... idObject) {
+	public void deleteObject(String sql, Object... idObject) {
 		this.throwIfUowIsEmpty("da bi testirali update prvo morate pozvati insert...(...) u repository objekat");
 		Connection connection = getConnection();
 		try {
@@ -262,14 +257,14 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 		}
 	}
 
-	private void insertForUpdateAndDelete(Connection connection){
-		if (insertDataHolder.isHolderContainsMoreThanOne()) 
+	private void insertForUpdateAndDelete(Connection connection) {
+		if (insertDataHolder.isHolderContainsMoreThanOne())
 			this.insertAllPreviousDataInDb(this.insertDataHolder, connection);
-		 else 
+		else
 			this.insertPairInDb(connection, this.insertDataHolder.getLastInsertedTestData());
 	}
-	
-	private void insertForSelection(Connection connection){
+
+	private void insertForSelection(Connection connection) {
 		if (insertDataHolder.isHolderContainsMoreThanOne())
 			this.insertAllPreviousDataInDb(
 					(updateDataHolderForInsert.isEmpty() ? this.insertDataHolder : this.updateDataHolderForInsert),
@@ -279,7 +274,7 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 					(this.updateDataHolderForInsert.isEmpty() ? this.insertDataHolder.getLastInsertedTestData()
 							: this.updateDataHolderForInsert.getLastInsertedTestData()));
 	}
-	
+
 	private Connection getConnection() {
 		Connection connection = null;
 		try {
@@ -290,12 +285,12 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 		}
 		return connection;
 	}
-	
-	private void throwIfUowIsEmpty(String throwMessage){
+
+	private void throwIfUowIsEmpty(String throwMessage) {
 		if (this.insertDataHolder.isEmpty())
 			throw new CommonJdbcRepositoryForTestException(throwMessage);
 	}
-	
+
 	private void closeConnection(Connection connection) {
 		try {
 			connection.rollback();

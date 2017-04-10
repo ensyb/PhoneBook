@@ -4,12 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.github.ensyb.phone.application.configuration.DatabaseConnectionConfiguration;
+import io.github.ensyb.phone.application.configuration.database.H2Configuration;
 import io.github.ensyb.phone.application.connectivity.DataSourceFactory;
 import io.github.ensyb.phone.application.repository.CommonJdbcTestingRepository;
 import io.github.ensyb.phone.domain.contact.repository.ContactRepository;
@@ -17,17 +22,35 @@ import io.github.ensyb.phone.domain.contact.vo.ContactVo;
 
 public class ContactRepositoryTest {
 
-	ContactRepository repository;
-	ContactVo contact;
-	
+	private BasicDataSource ds;
+	private ContactRepository repository;
+	private ContactVo contact;
+
 	@Before
 	public void setup(){
+		DataSourceFactory factory = new DataSourceFactory(new H2Configuration(), "user", "user");
+		ds = factory.consumeDataSourceForTest();
+		String privremeno = 	"CREATE TABLE IF NOT EXISTS `contact` ("+
+								 " `id` integer NOT NULL AUTO_INCREMENT PRIMARY KEY,"+
+								 " `userid` integer NOT NULL, "+
+								 " `name` varchar(24) NOT NULL,"+
+								 " `phonenumber` varchar(16) NOT NULL,"+
+								 " `description` varchar(620) NOT NULL,"+")";
+		try {
+			Connection connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			PreparedStatement statement = connection.prepareStatement(privremeno);
+			statement.executeUpdate();
+			connection.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		this.repository = new ContactRepository
 				.ContactDefaultJdbcRepository(
-				new CommonJdbcTestingRepository(
-						new DataSourceFactory(
-								new DatabaseConnectionConfiguration.MysqlConfiguration("localhost", "phonebook", 3306), 
-								"root", "root").consumeDataSourceForTest()));
+				new CommonJdbcTestingRepository(ds));
+		
 		contact = new ContactVo
 				.ContactVoBuilder()
 				.id(1)
@@ -37,12 +60,25 @@ public class ContactRepositoryTest {
 				.description("neki moj kontakt").build();
 	}
 	
+	@After
+	public void taredown(){
+		try {
+			Connection connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			PreparedStatement statement = connection.prepareStatement("DROP TABLE IF EXISTS `contact`;");
+			statement.executeUpdate();
+			connection.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Test
 	public void testInsertInRepository(){
 		ContactVo vo = repository.insertContact(this.contact);
-		assertTrue(vo.id() > 0);
+		assertTrue(vo.id() != 0);
 	}
-	
 	@Test
 	public void testSearchContact(){
 		repository.insertContact(this.contact);
@@ -51,7 +87,6 @@ public class ContactRepositoryTest {
 		
 		assertFalse(selectedVo.isEmpty());
 	}
-	
 	@Test
 	public void testSelectFromRepository(){
 		repository.insertContact(this.contact);
@@ -60,7 +95,7 @@ public class ContactRepositoryTest {
 		
 		assertTrue(selectedVo.id() > 0);
 	}
-	
+
 	@Test
 	public void testUpdateRepository(){
 		ContactVo contact = repository.insertContact(this.contact);
@@ -76,7 +111,5 @@ public class ContactRepositoryTest {
 		ContactVo updatedContact = repository.searchForContact(contact.id());
 		assertEquals(newName, updatedContact.name());
 	}
-	
-
 	
 }

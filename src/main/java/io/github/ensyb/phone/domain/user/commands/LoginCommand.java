@@ -25,7 +25,7 @@ public class LoginCommand implements Command{
 			return new Write("korisnik sa "+ request.getParameter("email")+" ne postoji");			
 		else{
 			if(!BCrypt.checkpw(request.getParameter("password"), user.userPassword()))
-				return new Write("netaèan password");
+				return new Write("netacan password");
 			else{
 				request.setAttributeInSession("user", user);
 				return new Write("success");

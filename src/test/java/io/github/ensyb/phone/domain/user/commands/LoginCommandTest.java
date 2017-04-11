@@ -65,7 +65,7 @@ public class LoginCommandTest {
 				new RequestParametarPair("password","pass")); 
 		
 		Response execute = command.execute(mock);
-		String expectedResponse = "netaèan password";
+		String expectedResponse = "netacan password";
 		assertEquals("not returned password failure",expectedResponse, execute.consumePath());
 	
 	}

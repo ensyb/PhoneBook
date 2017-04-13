@@ -181,23 +181,21 @@ public final class CommonJdbcTestingRepository implements CommonJdbcRepository {
 	public int insertObjectReturnKey(String sql, Object[] outputMapperValues) {
 		this.insertDataHolder.insertData(new TestDataPair(sql, outputMapperValues));
 		int generatedKey = 0;
+		Connection connection = getConnection();
 		try {
-			Connection connection = getConnection();
 			PreparedStatement statement = preparedStatement.createPrepareStatement(connection, sql, true,
 					outputMapperValues);
 			int affectedRows = statement.executeUpdate();
 			if (affectedRows == 0)
 				throw new CommonJdbcRepositoryForTestException("repository insert failed, no rows affected.");
 			ResultSet res = statement.getGeneratedKeys();
-			if (res.next()) {
-				generatedKey = res.getInt(1);
-			} else {
-				throw new CommonJdbcRepositoryForTestException("repository failed to return generated key");
-			}
-
-			closeConnection(connection);
+				if(res.next())
+					generatedKey = res.getInt(1);
 		} catch (SQLException e) {
 			System.out.println(e);
+		}finally{
+			closeConnection(connection);
+			
 		}
 		return generatedKey;
 	}

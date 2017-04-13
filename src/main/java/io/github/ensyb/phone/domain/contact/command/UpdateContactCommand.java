@@ -7,7 +7,6 @@ import io.github.ensyb.phone.application.commands.Command;
 import io.github.ensyb.phone.application.dispatcher.request.Request;
 import io.github.ensyb.phone.application.dispatcher.response.Redirect;
 import io.github.ensyb.phone.application.dispatcher.response.Response;
-import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
 import io.github.ensyb.phone.domain.contact.repository.ContactRepository;
 import io.github.ensyb.phone.domain.contact.vo.ContactVo;
 import io.github.ensyb.phone.domain.user.vo.UserVo;
@@ -32,7 +31,7 @@ public class UpdateContactCommand implements Command {
 		}
 		
 		ContactRepository repository = new ContactRepository
-				.ContactDefaultJdbcRepository(new CommonJdbcRepository.Repository(request.useDataSource()));
+				.ContactDefaultJdbcRepository(request.useCommonJdbcRepository());
 		repository.updateContact(updatedContact);
 		
 		request.setAttributeInSession("searchList",contactList);

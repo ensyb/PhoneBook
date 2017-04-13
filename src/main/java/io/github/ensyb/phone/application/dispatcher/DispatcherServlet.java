@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.github.ensyb.phone.application.commands.Command;
-import io.github.ensyb.phone.application.commands.NotFoundCommand;
+import io.github.ensyb.phone.application.commands.IndexCommand;
 import io.github.ensyb.phone.application.dispatcher.request.Request;
 import io.github.ensyb.phone.application.dispatcher.response.Forward;
 import io.github.ensyb.phone.application.dispatcher.response.Redirect;
@@ -74,7 +74,7 @@ public class DispatcherServlet extends HttpServlet {
 		String commandName = request.getRequestURI().substring(request.getContextPath().length());
 		Command command = commandMapping.get(commandName);
 		if (command == null) {
-			command = new NotFoundCommand();
+			command = new IndexCommand();
 		}
 		try {
 			Response viewModel = command.execute(new Request.PhonebookRequest(request, response));

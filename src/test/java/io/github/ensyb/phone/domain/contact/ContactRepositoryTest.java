@@ -28,7 +28,7 @@ public class ContactRepositoryTest {
 
 	@Before
 	public void setup(){
-		DataSourceFactory factory = new DataSourceFactory(new H2Configuration(), "user", "user");
+		DataSourceFactory factory = new DataSourceFactory(new H2Configuration(), "user", "password");
 		ds = factory.consumeDataSourceForTest();
 		String privremeno = 	"CREATE TABLE IF NOT EXISTS `contact` ("+
 								 " `id` integer NOT NULL AUTO_INCREMENT PRIMARY KEY,"+
@@ -49,7 +49,7 @@ public class ContactRepositoryTest {
 		
 		this.repository = new ContactRepository
 				.ContactDefaultJdbcRepository(
-				new CommonJdbcTestingRepository(ds));
+				new CommonJdbcTestingRepository(this.ds));
 		
 		contact = new ContactVo
 				.ContactVoBuilder()
@@ -73,12 +73,15 @@ public class ContactRepositoryTest {
 			e.printStackTrace();
 		}
 	}
-	
 	@Test
 	public void testInsertInRepository(){
-		ContactVo vo = repository.insertContact(this.contact);
-		assertTrue(vo.id() != 0);
+		repository.insertContact(this.contact);
+		List<ContactVo> contacts = repository.searchForContacts(this.contact.userId(), "fuj");
+		assertFalse(contacts.isEmpty());
 	}
+	
+
+	
 	@Test
 	public void testSearchContact(){
 		repository.insertContact(this.contact);
@@ -87,13 +90,19 @@ public class ContactRepositoryTest {
 		
 		assertFalse(selectedVo.isEmpty());
 	}
-	@Test
+	
+ 	@Test
 	public void testSelectFromRepository(){
-		repository.insertContact(this.contact);
+		repository.insertContact(new ContactVo.ContactVoBuilder()
+				.id(3)
+				.userId(1)
+				.name("contact")
+				.phoneNumber("111-111-111")
+				.description("das").build());
 		
-	    ContactVo selectedVo = repository.searchForContact(1);
+	    ContactVo selectedVo = repository.searchForContact(3);
 		
-		assertTrue(selectedVo.id() > 0);
+		assertTrue(selectedVo.name().equals("contact"));
 	}
 
 	@Test
@@ -111,5 +120,6 @@ public class ContactRepositoryTest {
 		ContactVo updatedContact = repository.searchForContact(contact.id());
 		assertEquals(newName, updatedContact.name());
 	}
+	
 	
 }

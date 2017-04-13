@@ -1,7 +1,5 @@
 package io.github.ensyb.phone.domain.user.repository;
 
-import java.util.List;
-
 import io.github.ensyb.phone.application.repository.CommonJdbcRepository;
 import io.github.ensyb.phone.application.repository.mappers.DataInputMapper;
 import io.github.ensyb.phone.application.repository.mappers.DataOutputMapper;
@@ -11,7 +9,6 @@ public interface UserRepository {
 
 	public UserVo searchUser(int id);
 	public UserVo searchUser(String searchString);
-	public List<UserVo> searchForMultipleUsers();
 	public UserVo insertUser(UserVo user);
 	public void updateUser(UserVo user);
 	
@@ -21,7 +18,7 @@ public interface UserRepository {
 		private final String selectUserById = "SELECT id,email,password FROM user WHERE id=?";
 		private final String selectUserByEmail = "SELECT id,email,password FROM user WHERE email=?";
 		private final String insertUser = "INSERT INTO user (id,email,password) VALUES (?,?,?)";
-		private final String updateUser = "UPDATE user SET id = ?, email = ?,password = ?,  WHERE id = ?";
+		private final String updateUser = "UPDATE user SET id = ?, email = ?,password = ?  WHERE id = ?";
 		
 		private DataInputMapper<UserVo> userInput = (resultSet) -> {
 			return new UserVo(resultSet.getInt("id"),resultSet.getString("email"), resultSet.getString("password"));
@@ -43,12 +40,6 @@ public interface UserRepository {
 		@Override
 		public UserVo searchUser(String email) {
 			return repository.querryForObjectPreparedStaement(selectUserByEmail, userInput, email);
-		}
-
-		@Override
-		public List<UserVo> searchForMultipleUsers() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 
 		@Override
